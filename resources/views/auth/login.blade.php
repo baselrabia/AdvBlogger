@@ -52,7 +52,7 @@
                 <button type="submit" class="btn btn-primary">
                     Login
                 </button>
-                
+                <p class="text-center"><small><a href="{{ route('reset.security') }}"> Forgot Your Password ? </a></small></p>
         
             </div>
         </div>

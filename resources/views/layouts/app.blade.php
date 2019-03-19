@@ -19,12 +19,12 @@
     <div id="app">
        @include('layouts.navbar')
         <div class="conatiner">
-            <div class="row"> 
+            <div class="row" style="margin-right: 0px"> 
                 <div class="col-md-3"></div>
                 <div class="col-12 col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">@yield('panel-heading')</div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="padding: 25px">
                                 @include('layouts.messages')
                                 @yield('content')
                             </div>

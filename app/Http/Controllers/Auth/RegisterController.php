@@ -41,8 +41,9 @@ class RegisterController extends Controller
     	 	'location'=> ['regex:/^[a-zA-Z0-9-_. ]*$/','required','min:3','max:23'],
     	 	'password'=> 'required|string|min:6|max:32|confirmed ',
     	 	'dob'=> 'required|date|before_or_equal:2010-01-01|date_format:Y-m-d',
-
-    	 ]);
+    	 	'sec_question'=>'required|string|in:where_are_you_from,what_is_your_hobby,what_is_your_favorite_car,who_is_your_favorite_doctor_or_teacher',
+    	 	'sec_answer'=> ['regex:/^[a-zA-Z0-9 ]*$/','required','min:3','max:32','string'],
+		]);
 
     	
     	 $user = Sentinel::register([
@@ -52,7 +53,9 @@ class RegisterController extends Controller
     	 	'last_name'=> request()->last_name,
     	 	'location'=> request()->location,
     	 	'password'=> request()->password,
-    	 	'dob'=> request()->dob
+    	 	'dob'=> request()->dob,
+    	 	'secuirty_question'=> request()->sec_question,
+    	 	'secuirty_answer'=> request()->sec_answer,
     	 ]);
 
     	 $user = Sentinel::findById($user->id);

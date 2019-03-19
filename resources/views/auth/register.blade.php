@@ -57,6 +57,24 @@
                 <input type="password" class="form-control" placeholder="Password Confirmation" name="password_confirmation" required>
             </div>
         </div>
+
+        <div class="form-group">
+        <label for="sec_question"> Security Question </label>
+            <select class="form-control" name="sec_question">
+              <option selected disabled>Pick Up A Question</option>
+                <option value="who_is_your_favorite_doctor_or_teacher">Who is your favorite Doctor Or Teacher ?</option>
+              <option value="where_are_you_from">Where Are you from?</option>
+              <option value="what_is_your_hobby">What is your hobby?</option>
+              <option value="what_is_your_favorite_car">What is your favorite car ?</option>
+            </select>
+        </div>
+        <div class="form-group">
+        <label for="sec_answer"> Answer The Question</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input type="text" class="form-control" placeholder="Answer The Question" name="sec_answer" required value="{{ old('sec_answer') }}">
+            </div>
+        </div>
       
         <div class="form-group">
         <label for="dob"> Date Of Birth </label>
