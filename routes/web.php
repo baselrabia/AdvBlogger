@@ -61,6 +61,8 @@ Route::group(['namespace'=>'Auth'],function(){
 		'as' => 'reset.security3'
 	]);
 
+ Route::get('/login/{provider}', 'SocialController@redirect');
+ Route::get('/login/{provider}/callback','SocialController@Callback');
 
 
  });
@@ -99,6 +101,8 @@ Route::post('/logout',[
 	})->name('admin.dashboard');
 
 });
+
+
 
 
 

@@ -101,5 +101,15 @@
         </div>
 
     </form>
+    <form>
+        <div class="form-group row">
+            <div class="text-center"> 
+                <a href="{{ url('/login/google') }}" class="btn btn-primary" style="background-color:#cf4332;border-color:#cf4332; "><i class="fa fa-google-plus fa-lg" aria-hidden="true" style="padding:6px"></i>  Join Us With Google </a>
+           
+                 <a href="{{ url('/login/facebook') }}" class="btn btn-primary" style="background-color:#3b5998"><i class="fa fa-facebook-f fa-lg" aria-hidden="true" style="padding:6px"></i> Join Us With Facebook</a>
+                 
+            </div>
+        </div>
+    </form>
 
 @endsection
