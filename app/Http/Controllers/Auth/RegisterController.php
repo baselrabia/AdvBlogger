@@ -57,6 +57,8 @@ class RegisterController extends Controller
     	 	'secuirty_question'=> request()->sec_question,
     	 	'secuirty_answer'=> request()->sec_answer,
     	 ]);
+         
+
 
     	 $user = Sentinel::findById($user->id);
     	 $activationToken = Activation::create($user);
