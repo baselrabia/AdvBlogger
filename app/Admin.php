@@ -10,6 +10,10 @@ class Admin extends EloquentUser
 {
     protected $table = 'users';
 
+    public function tags(){
+       return $this->hasMany(Tag::class);
+    }
+
     public function posts(){
        return $this->hasMany(Post::class);
     }

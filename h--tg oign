@@ -1,0 +1,23 @@
+[33mcommit 4d4b31dbdfd2600397fa8714b904bcaa02ff179d[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Basel rabia <baselrabia@gmail.com>
+Date:   Tue Apr 2 02:42:10 2019 +0200
+
+    finish making blogger ,approve , privileges and see online users
+
+[33mcommit dbba951f80d518ddf6b95d4bfc807b655b93a137[m[33m ([m[1;33mtag: v1.2.0[m[33m)[m
+Author: Basel rabia <baselrabia@gmail.com>
+Date:   Wed Mar 20 05:24:44 2019 +0200
+
+    login with socialite package facebook and google plus
+
+[33mcommit 5e10ae50e4f797014ac0fee291204ddd5e60614f[m[33m ([m[1;33mtag: v1.1.0[m[33m)[m
+Author: Basel rabia <baselrabia@gmail.com>
+Date:   Wed Mar 20 01:33:14 2019 +0200
+
+    changed password and reset By Email or Question plus remember me
+
+[33mcommit 07d71543d7a6c8541ecee1298593385631c94784[m[33m ([m[1;33mtag: v1.0.0[m[33m)[m
+Author: Basel rabia <baselrabia@gmail.com>
+Date:   Thu Mar 14 15:43:59 2019 +0200
+
+    AdvBlogger after complete email verify and activation

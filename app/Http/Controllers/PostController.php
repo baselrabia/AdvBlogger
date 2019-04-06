@@ -43,10 +43,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title'=> 'required|string|unique:posts,title|min:3|max:33|alpha_dash',
+            'title'=> 'required|string|unique:posts,title|min:3|max:32|alpha_dash',
             'body'=> ['required','string','regex:/^[a-zA-Z0-9-_. ]*$/','min:6','max:300'],
             'imagePath'=> 'nullable|max:1999|image|mimes:png,jpg,jpeg',
+            'tags'=> ['required','string','regex:/^[a-zA-Z0-9-_., ]*$/','min:3','max:32']
+
         ]);
+
+        if(\App\Tag::assignTags(request('tags'))){
 
         if (request()->hasFile('imagePath')){
            $file_with_ext = request()->file('imagePath')->getClientOriginalName();
@@ -56,13 +60,26 @@ class PostController extends Controller
 
         }
 
-        Post::forceCreate([
+        $post = Post::forceCreate([
             'title'=> request('title'),
             'body'=>  request('body'),
             'admin_id'=>Sentinel::getUser()->id,
             'imagePath'=> $file_name_new ?? "default.jpg"
         ]);
+
+        if(is_array(\Session::get('tags'))){
+                foreach(\Session::get('tags') as $tag){
+
+                    $post->tags()->attach($tag);
+                }
+            }else{
+                $post->tags()->attach(\Session::get('tags'));
+                
+            }
+            \Session::forget('tags');
+
         return redirect()->route('posts.index')->with('success','Post Has Been Created Successfully'); 
+        }
     }
 
     /**
@@ -103,23 +120,53 @@ class PostController extends Controller
             'title'=> "required|string|unique:posts,title,$post->id|min:3|max:32|alpha_dash",
             'body'=> ['required','string','regex:/^[a-zA-Z0-9-_. ]*$/','min:6','max:300'],
             'imagePath'=> 'nullable|max:1999|image|mimes:png,jpg,jpeg',
+            'tags'=> ['required','string','regex:/^[a-zA-Z0-9-_., ]*$/','min:3','max:32',]
         ]);
 
-        if (request()->hasFile('imagePath')){
-           $file_with_ext = request()->file('imagePath')->getClientOriginalName();
-           $file_ext = request()->file('imagePath')->getClientOriginalExtension();
-           $file_name_new = sha1(str_random(40) . time()).'.'.$file_ext;
-           $file_path = request()->file('imagePath')->move(public_path().'/images/',$file_name_new);
+        if(\App\Tag::assignTags(request('tags'))){
 
-        }
+            if (request()->hasFile('imagePath')){
+               $file_with_ext = request()->file('imagePath')->getClientOriginalName();
+               $file_ext = request()->file('imagePath')->getClientOriginalExtension();
+               $file_name_new = sha1(str_random(40) . time()).'.'.$file_ext;
+               $file_path = request()->file('imagePath')->move(public_path().'/images/',$file_name_new);
 
-        Post::whereId($post->id)->update([
-            'title'=> request('title'),
-            'body'=>  request('body'),
-            'admin_id'=>Sentinel::getUser()->id,
-            'imagePath'=> $file_name_new ?? $post->imagePath
-        ]);
-        return redirect()->route('posts.index')->with('success','Post Has Been Updated Successfully');
+            }
+
+             $post = Post::whereTitle($post->title)->first()->update([
+                'title'=> request('title'),
+                'body'=>  request('body'),
+                'admin_id'=>Sentinel::getUser()->id,
+                'imagePath'=> $file_name_new ?? $post->imagePath
+            ]);
+
+             if($post){
+                $post = Post::whereTitle(request('title'))->first();
+                
+                 if(is_array(\Session::get('tags'))){
+
+                   for($i=0; $i<count(\Session::get('tags')); $i++){
+
+                       if ($i === 0){
+                         $post->tags()->sync(\Session::get('tags')[$i]);
+
+                       }
+                        $post->tags()->sync(\Session::get('tags')[$i],false);
+
+                    }
+
+                }else{
+                    $post->tags()->sync(\Session::get('tags'));
+                    
+                }
+                \Session::forget('tags');
+
+                return redirect()->route('posts.index')->with('success','Post Has Been Updated Successfully');
+                 }
+            
+            }
+                return redirect()->route('posts.index')->with('error','Post Could not be updated successfully');        
+
 
     }
 

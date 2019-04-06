@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('panel-heading')
+	Create A Post
+@endsection
 @section('content')
 
 	<form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
@@ -18,6 +21,10 @@
 
 			<label for="file"> Upload An Image </label>
 			<input type="file"  name="imagePath" >
+		</div>
+		<div class="form-group">
+			<label for="tags"> Tags </label>
+			<input type="text" name="tags" class="form-control" placeholder="Post Tags" value="{{ old('tags') }}" >
 		</div>
 		<div class="form-group">
 			<input type="submit" name="submit"  class="form-control btn btn-primary" value="Release Post" >

@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('panel-heading')
+	Edit A Post
+@endsection
 @section('content')
 
 	<form action="{{ route('posts.update',$post->title) }}" method="POST" enctype="multipart/form-data">
@@ -27,6 +30,13 @@
 			<label for="file"> Upload An Image </label>
 			<input type="file"  name="imagePath" >
 		</div>
+
+		<div class="form-group">
+			<label for="tags"> Tags </label>
+
+			<input type="text" name="tags" class="form-control" placeholder="Post Tags" value="{{ implode(' ', $post->tags->pluck('name')->toArray()) }}" >
+		</div>
+
 		<div class="form-group">
 			<input type="submit" name="submit"  class="form-control btn btn-primary" value="Edit Post" >
 		</div>

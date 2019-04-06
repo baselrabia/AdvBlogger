@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('panel-heading')
+	Posts
+@endsection
 @section('content')
 
 	@if (count($posts) > 0)

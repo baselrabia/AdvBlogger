@@ -115,9 +115,26 @@ Route::group(['namespace'=>'Auth'],function(){
 			'as' => 'posts.approve'
 		]);
 
+	Route::resource('/tags','TagController');
+	Route::get('/popular/tags','TagController@sortByPopularity');
+
+
+
 });
 
 
+
+		Route::get('/comments/{comment}','CommentController@show')->name('comments.show');
+Route::get('/comments/{comment}/{post}','CommentController@edit')->name('comments.edit');
+		Route::post('/comments/{post}','CommentController@store')->name('comments.store');
+	Route::put('/comments/{comment}','CommentController@update')->name('comments.update');
+Route::delete('/comments/{comment}','CommentController@destroy')->name('comments.destroy');
+
+Route::get('/replies/{reply}','ReplyController@show')->name('replies.show');
+Route::get('/replies/{reply}/{post}','ReplyController@edit')->name('replies.edit');
+Route::post('/replies/{comment}/{post}','ReplyController@store')->name('replies.store');
+Route::put('/replies/{reply}','ReplyController@update')->name('replies.update');
+Route::delete('/replies/{reply}','ReplyController@destroy')->name('replies.destroy');
 
 
 
