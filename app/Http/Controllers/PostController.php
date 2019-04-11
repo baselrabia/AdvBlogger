@@ -20,9 +20,23 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::listApproved();
-        return view('posts.index')->with('posts',$posts);
+        return view('posts.index')->with('posts',Post::listApproved()->get());
     }
+
+    public function home()
+    {
+        return view('home')->with('posts',Post::listApproved()->paginate(2));
+    }
+
+    public function getByArchive()
+    {
+
+        $posts = Post::listApproved()->filter(request()->route('month'),request()->route('year'))->get();
+
+        return view('posts.index')->with('posts',$posts);
+
+    }
+
 
     /**
      * Show the form for creating a new resource.

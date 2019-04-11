@@ -106,6 +106,7 @@ class MigrationCartalystSentinel extends Migration
             $table->string('secuirty_answer');
             $table->string('username')->unique();
             $table->string('location');
+            $table->string('profile_picture');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->timestamps();

@@ -12,7 +12,7 @@
         <div class="panel panel-white post panel-shadow">
             <div class="post-heading">
                 <div class="pull-left image">
-                   <img src="/profile_pictures/{{ $post->admin->profile_picutre ?? 'default.png'}}" class="img-circle avatar" alt="User Profile Image">
+                   <img src="/profile_pictures/{{ $post->admin->profile_picture ?? 'default.png'}}" class="img-circle avatar" alt="User Profile Image" style="object-fit: cover;">
                 </div>
                 <div class="pull-left meta">
                     <div class="title h5">
@@ -33,6 +33,7 @@
 
             <div class="post-description"> 
                 {{ $post->body }}
+                 @if (Sentinel::getUser()->hasAnyAccess(['admin.*','moderator.*']))
                 <div class="pull-right">
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Post Managing
@@ -82,6 +83,7 @@
                         </ul>
                     </div>
                 </div>
+                @endif
                 
             </div>
             <div class="post-footer">
@@ -89,11 +91,11 @@
                     {{csrf_field()}}
                     <div class="input-group"> 
                         <input class="form-control" placeholder="Add a comment" type="text" name="comment" style="height:50px;">
-                        @if (Sentinel::getUser()->hasAnyAccess(['admin.*','moderator.*']))
+                        
                         <span class="input-group-addon">
                             <a ><i class="fa fa-pencil"></i></a>  
                         </span>
-                        @endif
+                        
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary form-control">
@@ -107,7 +109,7 @@
                     <ul class="comments-list">
                         <li class="comment">
                             <a class="pull-left" href="/profile/{{$comment->user->username}}">
-                                <img src="/profile_pictures/{{ $post->admin->profile_picutre ?? 'default.png'}}" class="img-circle avatar" alt="User Profile Image">
+                                <img src="/profile_pictures/{{ $post->admin->profile_picture ?? 'default.png'}}" class="img-circle avatar" style="object-fit: cover;" alt="User Profile Image">
                             </a>
                             <div class="comment-body">
                                 <div class="comment-heading">
@@ -172,7 +174,7 @@
                                     @if ($comment->replies->count())
                                         @foreach ($comment->replies as $reply)
                                             <a class="pull-left" href="/profile/{{$comment->user->username}}">
-                                                <img src="/profile_pictures/{{ $post->admin->profile_picutre ?? 'default.png'}}" class="img-circle avatar" alt="User Profile Image">
+                                                <img src="/profile_pictures/{{ $post->admin->profile_picture ?? 'default.png'}}" class="img-circle avatar" style="object-fit: cover;" alt="User Profile Image">
                                             </a>                                            
                                             <div class="comment-body">
                                                 <div class="comment-heading">

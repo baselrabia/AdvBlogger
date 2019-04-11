@@ -28,8 +28,12 @@
                                 @include('layouts.messages')
                                 @yield('content')
                             </div>
-                        </div>
                     </div>
+                </div>
+               
+                @if(\Route::currentRouteName() != 'myProfile' && \Route::currentRouteName() != 'profile')
+                    @includeWhen(!in_array('guest',request()->route()->middleware()),'layouts.sidebar',['archives' => \App\post::archives()])
+                @endif
                   
                 </div>
         </div>

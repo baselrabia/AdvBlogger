@@ -6,6 +6,7 @@ use Sentinel;
 use Activation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Cartalyst\Sentinel\Checkpoints\{NotActivatedException,ThrottlingException};
 use App\User;
 use Hash;
 
@@ -33,6 +34,8 @@ class LoginController extends Controller
  		if ($user = User::whereUsernameOrEmail(request('email'),request('email'))->first()) {
  			$user = Sentinel::findById($user->id);
 
+            try {
+
 	 		if (Activation::completed($user)){
                 if(Hash::check(request()->password,$user->password)){
 	 			$user = Sentinel::login($user,$remember); 
@@ -47,7 +50,17 @@ class LoginController extends Controller
 	 		}else{
 	 			return redirect()->route('login')->with('error','Perhaps you forget to activate your account !!! ');
 	 		}
-	 		
+
+	 		} catch (NotActivatedException $e){
+
+                return redirect()->back()->with('error','Perhaps you forget to activate your account');
+
+            } catch (ThrottlingException $e){
+
+                return redirect()->back()->with('error',$e->getMessage());
+
+            }
+
 	    }
 
 
@@ -60,7 +73,7 @@ class LoginController extends Controller
     public function logout(){
 
     	Sentinel::logout(null,true);
-    	return redirect()->route('login')->with('success',' - logged out Successfully');
+    	return redirect()->route('login')->with('success',' Logged Out Successfully');
 
     }
 }

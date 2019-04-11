@@ -70,7 +70,7 @@ class ResetPasswordController extends Controller
             
 		 		if($user){
 		 			Session::put('user' , $user); 
-		 			Session::flash('success' , 'stage 2 : answering the sequrity question');
+		 			Session::flash('success' , 'stage 2 : Answering The Security Question');
 		 			return redirect()->back()->with('stage 2', 'this is a stage 2' );  
 		 		}else{
 		 			Session::flush();

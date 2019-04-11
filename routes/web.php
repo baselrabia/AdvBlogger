@@ -11,9 +11,10 @@
 |
 */
 
-// guest Middleware
+// Auth namespace Middleware
 
 Route::group(['namespace'=>'Auth'],function(){
+	// guest Middleware with Auth namespace
 	Route::group(['middleware'=>'guest'],function(){
 
 		Route::get('/register', [
@@ -66,9 +67,9 @@ Route::group(['namespace'=>'Auth'],function(){
 
 	 });
 
-	// Admin Middleware with Auth namespace
+	// user:admin Middleware with Auth namespace
 
-	Route::group(['middleware'=>'admin'],function(){
+	Route::group(['middleware'=>'user:admin'],function(){
 		Route::get('/change-password',[
 			'uses' => 'ChangePasswordController@getChangePassword',
 			'as' => 'change-password'
@@ -77,14 +78,14 @@ Route::group(['namespace'=>'Auth'],function(){
 			'uses' => 'ChangePasswordController@postChangePassword',
 			'as' => 'change-password'
 		]);
-
+		Route::post('/logout',[
+				'uses' => 'LoginController@logout',
+				'as' => 'logout'
+			]);
 
 	});
 
-	Route::post('/logout',[
-			'uses' => 'LoginController@logout',
-			'as' => 'logout'
-		]);
+
 
 });
  
@@ -100,12 +101,15 @@ Route::group(['namespace'=>'Auth'],function(){
 		return view('admin.dashboard');
 	})->name('admin.dashboard');
 
+
 	Route::get('/upgrade','AdminController@listUsers')->name('list.users');
 	Route::get('/downgrade','AdminController@listUsers');
 	Route::post('/downgrade/{username}','AdminController@downgradeUser')->name('downgrade.users');
 	Route::post('/upgrade/{username}','AdminController@upgradeUser')->name('upgrade.users');
 
+
 	Route::resource('/posts','PostController');
+
 	Route::get('/postsunapproved',[
 			'uses' => 'PostController@listUnApproved',
 			'as' => 'posts.unapproved'
@@ -116,62 +120,86 @@ Route::group(['namespace'=>'Auth'],function(){
 		]);
 
 	Route::resource('/tags','TagController');
+
 	Route::get('/popular/tags','TagController@sortByPopularity');
 
 
 
+
 });
 
 
-
-		Route::get('/comments/{comment}','CommentController@show')->name('comments.show');
-Route::get('/comments/{comment}/{post}','CommentController@edit')->name('comments.edit');
-		Route::post('/comments/{post}','CommentController@store')->name('comments.store');
-	Route::put('/comments/{comment}','CommentController@update')->name('comments.update');
-Route::delete('/comments/{comment}','CommentController@destroy')->name('comments.destroy');
-
-Route::get('/replies/{reply}','ReplyController@show')->name('replies.show');
-Route::get('/replies/{reply}/{post}','ReplyController@edit')->name('replies.edit');
-Route::post('/replies/{comment}/{post}','ReplyController@store')->name('replies.store');
-Route::put('/replies/{reply}','ReplyController@update')->name('replies.update');
-Route::delete('/replies/{reply}','ReplyController@destroy')->name('replies.destroy');
+// just user:admin Middleware
+ Route::group(['middleware'=>'user:admin'],function(){
+	Route::get('/profile','UserController@getProfile')->name('myProfile');
+	Route::get('/profile/{username}','UserController@getUserProfile')->name('profile');
+	Route::post('/profile','UserController@postProfile')->name('profile');
 
 
+		Route::get('/posts','PostController@index')->name('posts.index');
+	Route::get('/posts/{post}','PostController@show')->name('posts.show');
+
+			Route::get('/comments/{comment}','CommentController@show')->name('comments.show');
+	Route::get('/comments/{comment}/{post}','CommentController@edit')->name('comments.edit');
+			Route::post('/comments/{post}','CommentController@store')->name('comments.store');
+		Route::put('/comments/{comment}','CommentController@update')->name('comments.update');
+	Route::delete('/comments/{comment}','CommentController@destroy')->name('comments.destroy');
+
+	Route::get('/replies/{reply}','ReplyController@show')->name('replies.show');
+	Route::get('/replies/{reply}/{post}','ReplyController@edit')->name('replies.edit');
+	Route::post('/replies/{comment}/{post}','ReplyController@store')->name('replies.store');
+	Route::put('/replies/{reply}','ReplyController@update')->name('replies.update');
+	Route::delete('/replies/{reply}','ReplyController@destroy')->name('replies.destroy');
 
 
+	Route::get('/home','PostController@home')->name('home');
 
-Route::get('/home',function(){
-	return view('home');
-})->name('home');
+});
+
+
+// just User Middleware
+Route::get('/user/dashboard',function(){
+	return view('user.dashboard');
+})->name('user.dashboard')->middleware('user');
+
+
+// No Middleware
 Route::get('/',function(){
 	return view('welcome');
 });
 
-
-Route::get('/user/dashboard',function(){
-	return view('user.dashboard');
-})->name('user.dashboard');
+Route::get('/archives/{month}/{year}','PostController@getByArchive')->name('archives');
 
 
 
-Route::get('/sessions',function(){
-	dd(session()->all());
-});
 
 
 
-Route::get('/test',function(){
-	if(\App\Admin::listOnlineUsers() !== NULL){
-		foreach ( \App\Admin::listOnlineUsers() as $user) {
-			dump($user->roles()->first()->slug);
-		}
+
+// just Admin Tests Middleware
+
+ Route::group(['middleware'=>'admin'],function(){
 
 
-	}else{
-		echo 'No Online Users Now';
-	};
-});
+	Route::get('/sessions',function(){
+		dd(session()->all());
+	});
 
-Route::get('/testn2',function(){
-	dd(\App\Admin::upgradeUser(30,['user.show' => true ,'moderator.create' => false ,'admin.edit' => false]));
+
+
+	Route::get('/test',function(){
+		if(\App\Admin::listOnlineUsers() !== NULL){
+			foreach ( \App\Admin::listOnlineUsers() as $user) {
+				dump($user->roles()->first()->slug);
+			}
+
+
+		}else{
+			echo 'No Online Users Now';
+		};
+	});
+
+	Route::get('/testn2',function(){
+		dd(\App\Admin::upgradeUser(30,['user.show' => true ,'moderator.create' => false ,'admin.edit' => false]));
+	});
 });

@@ -27,7 +27,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock fa-lg"></i></span>
-                <input id="password" type="password" class="form-control" name="password" required>
+                <input id="password" type="password" style="font-size: 25px;" class="form-control" name="password" required>
 
                 @if ($errors->has('password'))
                     <span class="help-block">

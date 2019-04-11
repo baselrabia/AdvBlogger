@@ -19,7 +19,7 @@ class Admin extends EloquentUser
     }
 
     public static function approve($id){
-    	$post = \App\Post::find($id)->whereApproved(0 )->first();
+    	$post = \App\Post::find($id)->whereApproved(0)->first();
     	if($post){
     		$post->approved = 1 ;
     		$post->approved_by = Sentinel::getUser()->username;
@@ -33,6 +33,12 @@ class Admin extends EloquentUser
     	return false;
 
 
+    }
+
+
+    public static function adminTags(){
+        $username = Sentinel::getUser()->username;
+       return static::whereUsername($username)->first()->tags->take(4);
     }
 
 

@@ -15,6 +15,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        // change in view method every time we call view we gonne send archives and tags variable ..
+
+        view()->composer('layouts.sidebar',function($view){
+            if (!in_array('guest', request()->route()->middleware())){
+                $view->with(['archives' => \App\Post::archives(),'tags' => \App\Tag::PopularTags(),'adminTags' => \App\Admin::adminTags() ]);
+            }
+
+            if (in_array('admin', request()->route()->middleware())){
+            $view->with(['online_users' => \App\Admin::listOnlineUsers() ]);
+
+            }
+        });
     }
 
     /**

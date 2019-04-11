@@ -29,6 +29,8 @@
                 <button type="submit" class="btn btn-primary">
                     Send Email
                 </button>
+
+                <p class="text-center"><small><a href="{{ route('reset.security') }}">Reset By Security Question ?</a></small></p>
                 
         
             </div>

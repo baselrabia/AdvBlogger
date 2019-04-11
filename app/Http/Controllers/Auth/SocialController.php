@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Socialite;
 use App\User;
 use App\Http\Controllers\Controller;
+use File; 
 
 class SocialController extends Controller
 {
@@ -24,13 +25,21 @@ class SocialController extends Controller
 					$user = Sentinel::findById($user->id);
 		            $user = Sentinel::login($user); 
 		        	return redirect()->home();
-		}else{
+		}else{	
+
+		if ($provider = 'facebook'){
+			$fileContents = file_get_contents($userSocial->getAvatar());
+			File::put(public_path() . '/profile_pictures/' . $userSocial->getId()  . time() . "_avatar.jpg", $fileContents);
+			$file_name_new = $userSocial->getId()  . time() . "_avatar.jpg";
+			}
+
 
 
 					$user = Sentinel::registerAndActivate([
 			    	 	'email'			=> $userSocial->getEmail(),
 			    	 	'username' 		=> $userSocial->getName(),
 			    	 	'provider_id'   => $userSocial->getId(),
+			    	 	'profile_picture'=> $file_name_new ?? "default.png",
 		                'provider'      => $provider,
 		                'password' 		=> bcrypt(substr($userSocial->token, 0, 10)),
 		                'dob'			=>null,

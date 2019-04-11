@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -24,7 +25,33 @@ class Post extends Model
     }
 
     public static function listApproved(){
-    	return static::whereApproved(1)->orderByDesc('created_at')->paginate(10);
+    	return static::whereApproved(1)->orderByDesc('created_at');
     }
+
+
+    public static function archives(){
+      return static::selectRaw('year(created_at) year,monthname(created_at) month,count(*) published')
+      ->groupBy('year','month')
+      ->orderByDesc('year')
+      ->get()->toArray();
+
+    }
+
+
+    public static function scopeFilter($query,$month = null ,$year = null){
+
+       if (isset($month)){
+         $query->whereMonth('created_at',Carbon::parse($month)->month);
+
+      }
+       if (isset($year)){
+         $query->whereYear('created_at',intval($year));
+      }
+   
+    }
+
+
+
+
 }
 
