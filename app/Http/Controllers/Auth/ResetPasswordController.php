@@ -13,15 +13,17 @@ class ResetPasswordController extends Controller
     function getResetPasswordByEmail($email,$token){
     	$user = User::whereEmail($email)->first();
     	if($user){
-			$user = Sentinel::findById($user->id);
-			if(Reminder::exists($user)->code === $token){
-				\Session::put('user',$user);
-				\Session::put('token',$token);
-				return view('auth.reset-password');
+		    if(Reminder::exists($user)){
+            if(Reminder::exists($user)->code === $token){
+                \Session::put('user',$user);
+                \Session::put('token',$token);
+                return view('auth.reset-password');
 
-			}else{
-				return redirect()->route('login')->with('error','invalid Token');
-			}
+            }else{
+                return redirect()->route('login')->with('error','invalid Token');
+            }}else{
+                return redirect()->route('login')->with('error','Token Expired');
+            }
     		
 
     	}else{
@@ -35,7 +37,6 @@ class ResetPasswordController extends Controller
     		'password' => 'required|confirmed|min:6|max:32'
     	]);
 
-    	$user = Sentinel::findById(1);
 
 		if ($reminder = Reminder::complete(\Session::get('user'), \Session::get('token'), request()->password)){
 		    Reminder::removeExpired();
