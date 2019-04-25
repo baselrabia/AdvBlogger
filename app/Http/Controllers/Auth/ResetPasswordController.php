@@ -106,7 +106,7 @@ class ResetPasswordController extends Controller
     		])->first();
     		if($user){
     			Session::put('sec_answer' , request('sec_answer'));
-    			return redirect()->back()->with(['success' , 'stage 3 : Submit new password','stage 3' => 'this is a stage 3']); 
+    			return redirect()->back()->with(['success'  => 'stage 3 : Submit new password','stage 3' => 'this is a stage 3']); 
     		}else{
     			Session::flush();
     			return redirect()->back()->with('error','Invalid Data');
